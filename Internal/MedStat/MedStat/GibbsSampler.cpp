@@ -399,7 +399,7 @@ template<typename T> void GibbsSampler<T>::learn_gibbs(const map<string, vector<
 						pred_calib_mat.samples[j].outcome = 0; //doesn't matter for prediction only
 						for (size_t k = 0; k < pred_num_feats; ++k) {
 							int fixed_idx = (int)k + int(k >= feat_idx); //skip current
-							pred_calib_mat.data[all_names[fixed_idx]].push_back(train_vec[sel_idx * pred_num_feats + k]);
+							pred_calib_mat.data[all_names[fixed_idx]].push_back(train_vec[static_cast<size_t>(sel_idx) * static_cast<size_t>(pred_num_feats) + k]);
 						}
 					}
 

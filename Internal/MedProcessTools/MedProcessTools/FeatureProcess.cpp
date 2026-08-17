@@ -709,7 +709,7 @@ void FeatureNormalizer::reverse_apply(float &feature_value) const {
 			return; // no norm occoured
 
 		if (use_linear_transform) {
-			double inv_factor_m = (max_x - min_x) / 2 * max_val_prctile;
+			double inv_factor_m = static_cast<double>(max_x - min_x) / 2 * static_cast<double>(max_val_prctile);
 			feature_value = (feature_value + max_val_prctile)*inv_factor_m + min_x;
 			return;
 		}
@@ -1663,6 +1663,6 @@ void smearBins(vector<int>& bins, int nBins, int reqNbins) {
 	for (int i = 0; i < bins.size(); i++) {
 		int origBin = bins[i];
 		int nNewBins = (int)newBins[origBin].size();
-		bins[i] = newBins[origBin][nNewBins*(rand() / ((int)RAND_MAX))];
+		bins[i] = newBins[origBin][static_cast<size_t>(nNewBins) * (static_cast<size_t>(rand()) / static_cast<size_t>(RAND_MAX))];
 	}
 }

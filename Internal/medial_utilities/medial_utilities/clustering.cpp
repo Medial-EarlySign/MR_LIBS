@@ -22,7 +22,7 @@ int kmeans (double *x, int nrows, int ncols, int k, int *clusters, double *means
 		fprintf(stderr,"Kmeans interation %d\n",++iter) ;
 
 		// Get Means
-		memset(means,0,ncols*k*sizeof(double)) ;
+		memset(means,0,static_cast<size_t>(ncols)*static_cast<size_t>(k)*sizeof(double)) ;
 		memset(counts,0,k*sizeof(int)) ;
 
 		for (int i=0; i<nrows; i++) {

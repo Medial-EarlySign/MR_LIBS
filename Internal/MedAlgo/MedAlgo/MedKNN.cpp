@@ -150,7 +150,7 @@ int MedKNN::Predict(float *xPred, float *&preds, int pred_samples, int _nftrs) c
 
 	float *nbrs_x = NULL, *nbrs_y = NULL, *nbrs_w = NULL, *nbrs_b = NULL, *nbrs_r = NULL;
 	if (params.knnAv == KNN_WEIGHTEDLS) {
-		if ((nbrs_x = (float *)malloc(params.k*nftrs * sizeof(float))) == NULL || (nbrs_y = (float *)malloc(params.k * sizeof(float))) == NULL ||
+		if ((nbrs_x = (float *)malloc(static_cast<size_t>(params.k) * static_cast<size_t>(nftrs) * sizeof(float))) == NULL || (nbrs_y = (float *)malloc(static_cast<size_t>(params.k) * sizeof(float))) == NULL ||
 			(nbrs_w = (float *)malloc(params.k * sizeof(float))) == NULL || (nbrs_b = (float *)malloc(nftrs * sizeof(float))) == NULL ||
 			(nbrs_r = (float *)malloc(nftrs * sizeof(float))) == NULL) {
 			fprintf(stderr, "nbrs data allocation failed\n");
@@ -343,7 +343,7 @@ void find_nbrs(const float *test_x, int ind, int k, const float *learn_x, int nl
 			if (ws[order[j]] == 0)
 				break;
 
-			double d = ws[order[j]] * (learn_x[XIDX(i, order[j], nftrs)] - test_x[XIDX(ind, order[j], nftrs)]);
+			double d = static_cast<double>(ws[order[j]]) * static_cast<double>((learn_x[XIDX(i, order[j], nftrs)] - test_x[XIDX(ind, order[j], nftrs)]));
 			if (norm == 2)
 				dist += d * d;
 			else
@@ -377,7 +377,7 @@ double get_mean_dist(const float *test_x, int ind, const float *learn_x, int nle
 		int irand = (int)(nlearn * rand() / (RAND_MAX + 1.0));
 
 		for (int j = 0; j < nftrs; j++) {
-			double d = ws[j] * (learn_x[XIDX(irand, j, nftrs)] - test_x[XIDX(ind, j, nftrs)]);
+			double d = static_cast<double>(ws[j]) * static_cast<double>((learn_x[XIDX(irand, j, nftrs)] - test_x[XIDX(ind, j, nftrs)]));
 			if (knnMetr == KNN_L2)
 				sum += d * d;
 			else

@@ -776,7 +776,7 @@ int MedGDLM::Learn_logistic_sgd(float *x, float *y, const float *w, int nsamples
 	while (err > params.stop_at_err && niter < params.max_iter) {
 		for (int bn = 0; bn < n_batches; bn++) {
 
-			size_t from = bn * params.batch_size;
+			size_t from = static_cast<size_t>(bn) * static_cast<size_t>(params.batch_size);
 			int len = params.batch_size; // len is nsamples in batch
 			if ((int)from + len > nsamples) len = nsamples - (int)from;
 
@@ -1018,7 +1018,7 @@ int MedGDLM::Learn_logistic_sgd_threaded(float *x, float *y, const float *w, int
 				}
 				grads.row(th) = grad.row(0);
 				for (int j = 0; j < n_batches_per_thread; j++) {
-					size_t from = i_b[th][j] * batch_size;
+					size_t from = static_cast<size_t>(i_b[th][j]) * static_cast<size_t>(batch_size);
 					int to = min((int)from + batch_size, nsamples);
 					int len = to - (int)from;
 					Map<MatrixXf> xf(&x[from*(size_t)nftrs], nftrs, len);

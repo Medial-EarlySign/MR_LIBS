@@ -1073,7 +1073,7 @@ bool TreeExplainer::convert_qrf_trees() {
 				tr[j].get_scores(forest.mode, forest.get_counts_flag, forest.n_categ, scores);
 				//convert values for each prediction:
 				for (size_t k = 0; k < scores.size(); ++k)
-					generic_tree_model.values[pos_in_model * num_outputs + j * num_outputs + k] = scores[k];
+					generic_tree_model.values[static_cast<size_t>(pos_in_model) * static_cast<size_t>(num_outputs) + j * static_cast<size_t>(num_outputs) + k] = scores[k];
 			}
 		}
 

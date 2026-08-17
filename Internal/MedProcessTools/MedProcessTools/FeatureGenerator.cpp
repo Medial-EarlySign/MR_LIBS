@@ -1405,7 +1405,7 @@ float BasicFeatGenerator::uget_std(UniversalSigVec &usv, int time, int _win_from
 		if (itime >= min_time) {
 			float ival = usv.Val(i, val_channel);
 			sum += ival;
-			sum_sq += ival * ival;
+			sum_sq += static_cast<double>(ival) * static_cast<double>(ival);
 			nvals++;
 		}
 	}
@@ -2462,7 +2462,7 @@ void ModelFeatGenerator::override_predictions(MedSamples& inSamples, MedSamples&
 			int idx = 0;
 			for (auto& idSamples : inSamples.idSamples) {
 				for (auto& sample : idSamples.samples) {
-					if (sample.prediction.size() < n_preds*t_size)
+					if (sample.prediction.size() < static_cast<size_t>(n_preds) * static_cast<size_t>(t_size))
 						MTHROW_AND_ERR("Cannot extract %d predictions from sample in ModelFeatGenerator::load\n", n_preds*t_size);
 					preds[t][i][idx++] = sample.prediction[t*n_preds + i];
 

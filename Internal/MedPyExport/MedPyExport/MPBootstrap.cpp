@@ -206,9 +206,9 @@ map<string, float> calc_auc_per_pid(Lazy_Iterator *iterator, int thread_num,
 			macro_auc += auc;
 			n += 1;
 			//Test all couples of cases-controls - It's the auc - multiply by num of cases*controls:
-			unsigned long long int exp_count = pid_to_case_count[it.first] * pid_to_control_count[it.first];
+			unsigned long long int exp_count = static_cast<unsigned long long int>(pid_to_case_count[it.first]) * static_cast<unsigned long long int>(pid_to_control_count[it.first]);
 			n_micto += exp_count;
-			micro_auc += exp_count * auc;
+			micro_auc += static_cast<double>(exp_count) * static_cast<double>(auc);
 		}
 	if (n > 0) {
 		macro_auc /= n;

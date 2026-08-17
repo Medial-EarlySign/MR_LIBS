@@ -601,7 +601,7 @@ int Calibrator::learn_time_window(const vector<MedSample>& orig_samples, const i
 		}
 		else {
 			tot_weight += controls_factor * weights[i];
-			bin_sum_preds[bin] += o.prediction[0] * weights[i] * controls_factor;
+			bin_sum_preds[bin] += static_cast<double>(o.prediction[0]) * static_cast<double>(weights[i]) * controls_factor;
 		}
 	}
 	//end stats collection

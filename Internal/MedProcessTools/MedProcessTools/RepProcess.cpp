@@ -1416,7 +1416,7 @@ void learnDistributionBorders(float &borderHi, float &borderLo, vector<float> fi
 	{
 
 		sum += *el;
-		sumsq += *el * *el;
+		sumsq += static_cast<double>(*el) * static_cast<double>(*el);
 	}
 	double mean = sum / (stop - start);
 	double var = sumsq / (stop - start) - mean * mean;
@@ -3245,8 +3245,8 @@ int RepCalcSimpleSignals::apply_calc_in_time(PidDynamicRec &rec, vector<int> &ti
 							}
 							if (v_times.size() < final_size + out_n_time_ch)
 							{
-								v_times.resize((final_size + 1) * out_n_time_ch);
-								v_vals.resize(n_vals * (final_size + 1));
+								v_times.resize(static_cast<size_t>(final_size + 1) * out_n_time_ch);
+								v_vals.resize(static_cast<size_t>(n_vals) * (final_size + 1));
 							}
 							for (int kk = 0; kk < out_n_time_ch; ++kk)
 							{
@@ -3400,8 +3400,8 @@ int RepCombineSignals::_apply(PidDynamicRec &rec, vector<int> &time_points, vect
 
 			if (v_times.size() < v_out_n_time_ch * final_size + 1)
 			{
-				v_times.resize(v_out_n_time_ch * (final_size + 1));
-				v_vals.resize(v_out_n_val_ch * (final_size + 1));
+				v_times.resize(static_cast<size_t>(v_out_n_time_ch) * (final_size + 1));
+				v_vals.resize(static_cast<size_t>(v_out_n_val_ch) * (final_size + 1));
 			}
 			for (int k = 0; k < v_out_n_time_ch; ++k)
 				v_times[v_out_n_time_ch * final_size + k] = rec.usvs[active_id].Time(idx[active_id] - 1, k);
@@ -4172,8 +4172,8 @@ int RepBasicRangeCleaner::_apply(PidDynamicRec &rec, vector<int> &time_points, v
 		int time_channels = rec.usvs[0].n_time_channels();
 		int val_channels = rec.usvs[0].n_val_channels();
 		len = rec.usvs[0].len;
-		vector<int> v_times(len * time_channels); // initialize size to avoid multiple resizings for long signals
-		vector<float> v_vals(len * val_channels);
+		vector<int> v_times(static_cast<size_t>(len) * static_cast<size_t>(time_channels));
+		vector<float> v_vals(static_cast<size_t>(len) * static_cast<size_t>(val_channels));
 
 		float last_value_n;
 		bool found_last_n = false;
@@ -4247,8 +4247,8 @@ int RepBasicRangeCleaner::_apply(PidDynamicRec &rec, vector<int> &time_points, v
 			}
 		}
 
-		v_times.resize(nKeep * time_channels);
-		v_vals.resize(nKeep * time_channels);
+		v_times.resize(static_cast<size_t>(nKeep) * static_cast<size_t>(time_channels));
+		v_vals.resize(static_cast<size_t>(nKeep) * static_cast<size_t>(time_channels));
 		// v_times and v_vals are likely longer than necessary, it's ok because nKeep defines which part of the vector is used.
 		rec.set_version_universal_data(output_id, iver, &v_times[0], &v_vals[0], nKeep);
 		++tp_idx;

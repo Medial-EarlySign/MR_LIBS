@@ -132,9 +132,9 @@ void MedLasso::initialize_vars(float *x_in, float *y_in, const float *w, vector<
 
 	for (int i = 0; i < nrow_train; i++)
 		for (int j = 0; j < n_ftrs; j++)
-			trainx[j][i] = sqrt(w[i]) * x_in[i * n_ftrs + j];
+			trainx[j][i] = static_cast<double>(sqrt(w[i])) * static_cast<double>(x_in[static_cast<size_t>(i) * static_cast<size_t>(n_ftrs) + static_cast<size_t>(j)]);
 	for (int i = 0; i < nrow_train; i++)
-		y1[i] = sqrt(w[i]) * y_in[i];
+		y1[i] = static_cast<double>(sqrt(w[i])) * static_cast<double>(y_in[i]);
 }
 
 //void initialize_test(double **&testx, float *test_in, int nrow_test, int n_ftrs) {

@@ -1034,8 +1034,8 @@ int RepPanelCompleter::update_signals(PidDynamicRec& rec, int iver, vector<vecto
 			if (nEXtra == 0) { // Easy case - no multiple values 			
 				for (int iPanel = 0; iPanel < panels.size(); iPanel++) {
 					if (panels[iPanel][iSig] != missing_val) {
-						values[trueSize * val_ch_sz] = panels[iPanel][iSig];
-						times[trueSize * time_ch_sz] = panel_times[iPanel];
+						values[static_cast<size_t>(trueSize) * static_cast<size_t>(val_ch_sz)] = panels[iPanel][iSig];
+						times[static_cast<size_t>(trueSize) * static_cast<size_t>(time_ch_sz)] = panel_times[iPanel];
 						if (data_idx < rec.usv.len && rec.usv.Time(data_idx) == panel_times[iPanel]) {
 							for (int i = 1; i < val_ch_sz; ++i)
 								values[trueSize * val_ch_sz + i] = rec.usv.Val(data_idx, i);
@@ -1052,8 +1052,8 @@ int RepPanelCompleter::update_signals(PidDynamicRec& rec, int iver, vector<vecto
 					int time = panel_times[iPanel];
 					if (multiple_values.find(time) != multiple_values.end()) {
 						for (float value : multiple_values[time]) {
-							values[trueSize * val_ch_sz] = value;
-							times[trueSize * time_ch_sz] = time;
+							values[static_cast<size_t>(trueSize) * static_cast<size_t>(val_ch_sz)] = value;
+							times[static_cast<size_t>(trueSize) * static_cast<size_t>(time_ch_sz)] = time;
 							if (data_idx < rec.usv.len && rec.usv.Time(data_idx) == time) {
 								for (int i = 1; i < val_ch_sz; ++i)
 									values[trueSize * val_ch_sz + i] = rec.usv.Val(data_idx, i);
@@ -1065,8 +1065,8 @@ int RepPanelCompleter::update_signals(PidDynamicRec& rec, int iver, vector<vecto
 						}
 					}
 					else if (panels[iPanel][iSig] != missing_val) {
-						values[trueSize * val_ch_sz] = panels[iPanel][iSig];
-						times[trueSize * time_ch_sz] = time;
+						values[static_cast<size_t>(trueSize) * static_cast<size_t>(val_ch_sz)] = panels[iPanel][iSig];
+						times[static_cast<size_t>(trueSize) * static_cast<size_t>(time_ch_sz)] = time;
 						if (data_idx < rec.usv.len && rec.usv.Time(data_idx) == time) {
 							for (int i = 1; i < val_ch_sz; ++i)
 								values[trueSize * val_ch_sz + i] = rec.usv.Val(data_idx, i);

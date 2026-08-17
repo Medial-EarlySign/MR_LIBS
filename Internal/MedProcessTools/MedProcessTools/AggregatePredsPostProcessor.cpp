@@ -260,7 +260,7 @@ void AggregatePredsPostProcessor::Apply(MedFeatures &matrix) {
 	batch.tags = p_matrix->tags;
 	batch.time_unit = p_matrix->time_unit;
 	batch.medf_missing_value = p_matrix->medf_missing_value;
-	batch.samples.resize(batch_size * resample_cnt);
+	batch.samples.resize(static_cast<size_t>(batch_size) * static_cast<size_t>(resample_cnt));
 	for (int i = 0; i < batch.samples.size(); ++i) {
 		batch.samples[i].id = int(i / resample_cnt);
 		batch.samples[i].time = i % resample_cnt;
@@ -277,22 +277,22 @@ void AggregatePredsPostProcessor::Apply(MedFeatures &matrix) {
 		int curr_sz = 0;
 		MedFeatures apply_batch = batch;
 		for (auto &it : p_matrix->data)
-			apply_batch.data[it.first].resize(resample_cnt * batch_size);
+			apply_batch.data[it.first].resize(static_cast<size_t>(resample_cnt) * static_cast<size_t>(batch_size));
 		while (curr_sz < batch_size && i < p_matrix->samples.size()) {
 			//add data from matrix
 			for (auto &it : p_matrix->data) {
 				for (size_t j = 0; j < resample_cnt; ++j)
-					apply_batch.data[it.first][curr_sz*resample_cnt + j] = it.second[i];
+					apply_batch.data[it.first][static_cast<size_t>(curr_sz) * static_cast<size_t>(resample_cnt) + j] = it.second[i];
 			}
 			++curr_sz;
 			++i;
 		}
 		//by curr_sz:
 		if (curr_sz < batch_size) {//last batch - remove last samples
-			apply_batch.samples.resize(curr_sz*resample_cnt);
+			apply_batch.samples.resize(static_cast<size_t>(curr_sz) * static_cast<size_t>(resample_cnt));
 			apply_batch.init_pid_pos_len();
 			for (auto &it : p_matrix->data)
-				apply_batch.data[it.first].resize(resample_cnt*curr_sz);
+				apply_batch.data[it.first].resize(static_cast<size_t>(resample_cnt) * static_cast<size_t>(curr_sz));
 		}
 		//apply feature processor on all duplicated batch:
 		feature_processor->apply(apply_batch);

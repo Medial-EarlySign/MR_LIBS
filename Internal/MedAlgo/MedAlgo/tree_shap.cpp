@@ -1769,7 +1769,7 @@ void iterative_tree_shap(const TreeEnsemble& trees, const ExplanationDataset &da
 	//calc for each feature if needed:
 	vector<tfloat> feats_contrib;
 	if (abs_cov_mat.nrows && names.size() != data.M) {
-		feats_contrib.resize(data.num_X * (data.M + 1) * trees.num_outputs, 0);
+		feats_contrib.resize(static_cast<size_t>(data.num_X) * (static_cast<size_t>(data.M) + 1) * static_cast<size_t>(trees.num_outputs), 0);
 		ExplanationDataset data_for_features = data;
 		data_for_features.num_Exp = data.M;
 		dense_tree_shap(trees, data_for_features, feats_contrib.data(), feature_dependence, model_transform, interactions);
@@ -1793,7 +1793,7 @@ void iterative_tree_shap(const TreeEnsemble& trees, const ExplanationDataset &da
 		MedMat<tfloat> last_instance_contribs(data.num_Exp, 1);
 		MedMat<tfloat> first_instance_contribs(data.M, 1); // for cov/mi fix if used when no groups:
 		if (abs_cov_mat.nrows && names.size() != data.M) { //need grouping
-			tfloat *instance_feats_contrib = &feats_contrib[i * (data.M + 1)  * trees.num_outputs];
+			tfloat *instance_feats_contrib = &feats_contrib[static_cast<size_t>(i) * (data.M + 1)  * static_cast<size_t>(trees.num_outputs)];
 			//calculate when no groups:
 			//dense_tree_shap(trees, instance, instance_feats_contrib.data(), feature_dependence, model_transform, interactions); //not thread safe
 			for (int j = 0; j < data.M; ++j) //skip bias last
@@ -2222,10 +2222,10 @@ void medial::shapley::explain_shapley(const MedFeatures &matrix, int selected_sa
 
 		//collect score for each permutition of missing values:
 		int end_l = grps_opts;
-		vector<float> full_pred_all_masks_without(max_loop * tot_feat_cnt), full_pred_all_masks_with(max_loop* tot_feat_cnt);
+		vector<float> full_pred_all_masks_without(static_cast<size_t>(max_loop) * static_cast<size_t>(tot_feat_cnt)), full_pred_all_masks_with(static_cast<size_t>(max_loop) * static_cast<size_t>(tot_feat_cnt));
 		for (int i = 0; i < max_loop; ++i) {
-			float *mat_without = &full_pred_all_masks_without[i * tot_feat_cnt];
-			float *mat_with = &full_pred_all_masks_with[i * tot_feat_cnt];
+			float *mat_without = &full_pred_all_masks_without[static_cast<size_t>(i) * static_cast<size_t>(tot_feat_cnt)];
+			float *mat_with = &full_pred_all_masks_with[static_cast<size_t>(i) * static_cast<size_t>(tot_feat_cnt)];
 			for (size_t j = 0; j < tot_feat_cnt; ++j)
 				if (!all_opts[i][j])
 					mat_without[j] = missing_value;
@@ -2823,7 +2823,7 @@ void medial::shapley::get_shapley_lime_params(const MedFeatures& data, const Med
 		double s1 = 0.0, s2 = 0.0;
 		for (int i = 0; i < n; i++) {
 			s1 += fabs(wgts[i]);
-			s2 += wgts[i] * wgts[i];
+			s2 += static_cast<double>(wgts[i]) * static_cast<double>(wgts[i]);
 		}
 		sample_size_sum += s1 * s1 / s2;
 
@@ -3096,9 +3096,9 @@ void medial::shapley::explain_minimal_set(const MedFeatures &matrix, int selecte
 						mask[ind] = true;
 
 			//collect score for each several samples - no need for more than 1:
-			vector<float> full_pred_all_masks_with(max_tests* tot_feat_cnt);
+			vector<float> full_pred_all_masks_with(static_cast<size_t>(max_tests) * static_cast<size_t>(tot_feat_cnt));
 			for (int i = 0; i < max_tests; ++i) {
-				float *mat_with = &full_pred_all_masks_with[i * tot_feat_cnt];
+				float *mat_with = &full_pred_all_masks_with[static_cast<size_t>(i) * static_cast<size_t>(tot_feat_cnt)];
 				for (size_t j = 0; j < tot_feat_cnt; ++j)
 					if (!mask[j])
 						mat_with[j] = missing_value;
@@ -3249,7 +3249,7 @@ void medial::shapley::explain_minimal_set(const MedFeatures &matrix, int selecte
 			collect_mask(fast_access, mask, sampler_gen, rnd_gen, max_tests, sampling_params,
 				full_feat_ls, matrix_with_imputation);
 			int final_size = (int)matrix_with_imputation.begin()->second.size();
-			vector<float> full_pred_all_masks_with(final_size* tot_feat_cnt);
+			vector<float> full_pred_all_masks_with(static_cast<size_t>(final_size) * static_cast<size_t>(tot_feat_cnt));
 			vector<const vector<float> *> gen_data_pointers(matrix_with_imputation.size());
 			int ind_ii = 0;
 			for (auto it = matrix_with_imputation.begin(); it != matrix_with_imputation.end(); ++it)
@@ -3258,7 +3258,7 @@ void medial::shapley::explain_minimal_set(const MedFeatures &matrix, int selecte
 				++ind_ii;
 			}
 			for (int i = 0; i < final_size; ++i) {
-				float *mat_with = &full_pred_all_masks_with[i * tot_feat_cnt];
+				float *mat_with = &full_pred_all_masks_with[static_cast<size_t>(i) * static_cast<size_t>(tot_feat_cnt)];
 				for (size_t j = 0; j < tot_feat_cnt; ++j)
 					mat_with[j] = gen_data_pointers[j]->at(i);
 			}

@@ -373,8 +373,8 @@ void FairnessPostProcessor::Learn(const MedFeatures &matrix) {
 				float pr_other_i = group_to_PR.at(it.first)[other_idx];
 				float pr_ref_i = ref_pr[i];
 				//Calc new PR for "fixed" scores:
-				double new_pr_size = pr_other_i * group_to_res.at(it.first).size();
-				new_pr_size += pr_ref_i * ref_size;
+				double new_pr_size = static_cast<double>(pr_other_i) * static_cast<double>(group_to_res.at(it.first).size());
+				new_pr_size += static_cast<double>(pr_ref_i) * static_cast<double>(ref_size);
 				new_pr_size /= tot_sample_size;
 
 				float val_to_cmp = new_pr_size;

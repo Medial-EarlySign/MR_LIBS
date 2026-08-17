@@ -699,7 +699,7 @@ template <class T> void MedMat<T>::normalize(int norm_type, float *wgts) {
 					if (wgts != NULL) val *= wgts[i];
 					num ++ ;
 					sum += val ;
-					sum2 += val*val ;
+					sum2 += static_cast<double>(val) * static_cast<double>(val);
 				}
 			}
 
@@ -724,7 +724,7 @@ template <class T> void MedMat<T>::normalize(int norm_type, float *wgts) {
 					if (wgts != NULL) val *= wgts[i];
 					num ++ ;
 					sum += val ;
-					sum2 += val*val ;
+					sum2 += static_cast<double>(val) * static_cast<double>(val);
 				}
 			}
 
