@@ -723,8 +723,8 @@ int TQRF_Forest::Train_AdaBoost(const MedFeatures &medf, const MedMat<float> &Y)
 	init_tables(qfeat);
 
 	// allocating all trees
-	trees.resize(params.ntrees * params.nrounds);
-	alphas.resize(params.ntrees * params.nrounds, 0);
+	trees.resize(static_cast<size_t>(params.ntrees) * static_cast<size_t>(params.nrounds));
+	alphas.resize(static_cast<size_t>(params.ntrees) * static_cast<size_t>(params.nrounds), 0);
 
 	// allocating zero counts for each sample
 	// for each count we only need to keep the counts for its last slice

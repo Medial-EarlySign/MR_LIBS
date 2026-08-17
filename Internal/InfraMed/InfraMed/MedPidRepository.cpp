@@ -645,7 +645,7 @@ int PidDynamicRec::set_version_universal_data(int sid, int version, int *_times,
 
 	usv.init(info);
 
-	vector<char> packed_data(len*info.bytes_len);
+	vector<char> packed_data(static_cast<size_t>(len) * static_cast<size_t>(info.bytes_len));
 
 	usv.data = &packed_data[0];
 	usv.len = len;

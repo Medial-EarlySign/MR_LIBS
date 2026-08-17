@@ -931,7 +931,7 @@ int micNode::weights_normalization_step()
 		for (j = 0; j < n_in; j++)
 			if (dropout_prob_in >= 1 || dropout_in[j]) {
 				curr_mean[j] += batch_out(i, j);
-				curr_var[j] += batch_out(i, j) * batch_out(i, j);
+				curr_var[j] += static_cast<double>(batch_out(i, j)) * static_cast<double>(batch_out(i, j));
 			}
 
 	double fact = (double)1 / (double)n_b;

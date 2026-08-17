@@ -182,7 +182,7 @@ void MedLightGBM::calc_feature_contribs(MedMat<float> &x, MedMat<float> &contrib
 	contribs.signals.push_back("b0");
 	contribs.recordsMetadata.insert(contribs.recordsMetadata.end(), x.recordsMetadata.begin(), x.recordsMetadata.end());
 
-	vector<double> out_result((ncols + 1) * nrows);
+	vector<double> out_result(static_cast<size_t>(ncols + 1) * static_cast<size_t>(nrows));
 	int64_t out_len = 0;
 
 	int ret = LGBM_BoosterPredictForMat(booster_handle_, x.data_ptr(), C_API_DTYPE_FLOAT32, nrows, ncols, 1,

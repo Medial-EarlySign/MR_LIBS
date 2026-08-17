@@ -31,7 +31,7 @@ int InMemRepData::insertData_to_buffer(int pid, int sid, int *time_data, float *
 
 	int len_bytes = sigs.Sid2Info[sid].bytes_len;
 
-	vector<char> elem(len_bytes*n_elem);
+	vector<char> elem(static_cast<size_t>(len_bytes) * static_cast<size_t>(n_elem));
 
 	int type = sigs.Sid2Info[sid].type;
 
@@ -55,7 +55,7 @@ int InMemRepData::insertData_to_buffer(int pid, int sid, int *time_data, float *
 	}
 	else {
 		for (int i = 0; i < n_elem; i++) {
-			if (MedSignalsSingleElemFill(type, &elem[len_bytes*i], tdata, vdata) < 0) {
+			if (MedSignalsSingleElemFill(type, &elem[static_cast<size_t>(len_bytes) * static_cast<size_t>(i)], tdata, vdata) < 0) {
 				MERR("ERROR: InMemRepData::insertData failed fill element %d/%d.", i, n_elem);
 				return -1;
 			}
