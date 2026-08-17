@@ -90,7 +90,7 @@ int KMeans(float *x, int nrows, int ncols, int K, int max_iter, float *centers, 
 	int niter = 0;
 	int go_on = 1;
 	int i, j, k;
-	vector<float> new_centers(K*ncols, (float)0);
+	vector<float> new_centers(static_cast<size_t>(K) * static_cast<size_t>(ncols), (float)0);
 	vector<int> n_in_cluster(K, 0);
 
 	float rss_prev = (float)nrows*(float)ncols*(float)1000;

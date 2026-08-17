@@ -876,7 +876,7 @@ unsigned long long MedIndex::get_index_max_data_size()
 
 	for (int i=0; i<idx_recs.size(); i++)
 		for (int j=0; j<idx_recs[i].size(); j++)
-			size += idx_recs[i][j].len * i_sid_type_byte_len[i];
+			size += static_cast<size_t>(idx_recs[i][j].len) * static_cast<size_t>(i_sid_type_byte_len[i]);
 //	for (int i=0; i<idx.size(); i++)
 //		size += idx[i].len;
 	return size;
@@ -965,7 +965,7 @@ int MedIndex::read_all_data(unsigned char *&work_area, unsigned long long &wlen,
 			}
 
 			len = idx_recs[i][j].len*i_sid_type_byte_len[i];
-			unsigned long long p_add = idx_recs[i][j].pos_add * i_sid_factor[i];
+			unsigned long long p_add = static_cast<size_t>(idx_recs[i][j].pos_add) * static_cast<size_t>(i_sid_factor[i]);
 			inf[idx_recs_base[i].file_num].read(&work_area[curr_w], idx_recs_base[i].pos_in_file + p_add, len);
 			if (idx_recs_base[i].data == NULL) {
 				idx_recs_base[i].data = (void *)(&work_area[curr_w]);

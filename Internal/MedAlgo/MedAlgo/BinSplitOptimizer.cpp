@@ -30,10 +30,10 @@ bool BinSplitOptimizer::evaluate(const vector<int> &indexes, float &totScore) {
 		long clusterSize = 0;
 		double clusterAvg = 0;
 		while (it != _histElements.end() && it->first < currentTh) {
-			clusterSize += it->second;
-			clusterAvg += _histAvg[it->first] * it->second;
-			++it;
-		}
+    clusterSize += it->second;
+    clusterAvg += static_cast<double>(_histAvg[it->first]) * static_cast<double>(it->second);
+    ++it;
+}
 
 		if (clusterSize == 0 || currParam < prevParam || indexes[i] < 0 || indexes[i] >= numOfElement
 			|| (_minSamples > 0 && clusterSize < _minSamples)) {
@@ -52,7 +52,7 @@ bool BinSplitOptimizer::evaluate(const vector<int> &indexes, float &totScore) {
 	double clusterAvg = 0;
 	while (it != _histElements.end()) {
 		clusterSize += it->second;
-		clusterAvg += it->first * it->second;
+		clusterAvg += static_cast<double>(it->first) * static_cast<double>(it->second);
 		++it;
 	}
 	if (clusterSize == 0 || (_minSamples > 0 && clusterSize < _minSamples)) {

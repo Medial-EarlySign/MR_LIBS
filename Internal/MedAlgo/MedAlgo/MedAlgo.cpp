@@ -359,7 +359,7 @@ int MedPredictor::predict(MedMat<float> &x, vector<float> &preds) const {
 
 	prepare_x_mat(x, w, nsamples, nftrs, transpose_for_predict);
 
-	preds.resize(nsamples*n_preds_per_sample());
+	preds.resize(static_cast<size_t>(nsamples) * static_cast<size_t>(n_preds_per_sample()));
 	float *_preds = &(preds[0]);
 
 	//	MLOG("MedMat,vector call: preds size is %d n_preds_per_sample %d nsamples %d\n",preds.size(),n_preds_per_sample(),nsamples);
@@ -427,10 +427,9 @@ int MedPredictor::threaded_predict(MedMat<float> &x, vector<float> &preds, int n
 		return -1;
 	}
 
-	prepare_x_mat(x, w, nsamples, nftrs, transpose_for_predict);
-	preds.resize(nsamples*n_preds_per_sample());
+	preds.resize(static_cast<size_t>(nsamples) * static_cast<size_t>(n_preds_per_sample()));
 
-	int th_nsamples = nsamples / nthreads;
+int th_nsamples = nsamples / nthreads;
 	vector<pred_thread_info> tp(nthreads);
 	for (int i = 0; i < nthreads; i++) {
 		tp[i].id = i;
@@ -481,7 +480,7 @@ int MedPredictor::predict(vector<float> &x, vector<float> &preds, int n_samples,
 		MTHROW_AND_ERR("Learned Feature model size was %d, request feature size for predict was %d\n",
 			features_count, n_ftrs);
 
-	preds.resize(n_samples*n_preds_per_sample());
+	preds.resize(static_cast<size_t>(n_samples) * static_cast<size_t>(n_preds_per_sample()));
 	float *_preds = &(preds[0]);
 	return Predict(VEC_DATA(x), _preds, n_samples, n_ftrs);
 }

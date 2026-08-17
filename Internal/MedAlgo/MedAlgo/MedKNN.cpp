@@ -502,7 +502,7 @@ int tcalc_stats(float *x, float *y, float *w, int nsamples, int nftrs, double **
 	double sum = 0;
 	double norm = 0;
 	for (int i = 0; i < nsamples; i++) {
-		sum += y[i] * w[i];
+		sum += static_cast<double>(y[i]) * static_cast<double>(w[i]);
 		norm += w[i];
 	}
 	(*yavg) = sum / norm;

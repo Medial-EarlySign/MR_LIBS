@@ -981,7 +981,7 @@ int MedGDLM::Learn_logistic_sgd_threaded(float *x, float *y, const float *w, int
 	if (params.verbose_learn)
 		MLOG("parallel logistic sgd :: rate = %g , momentum = %g , min_err = %g , ridge = %g\n", r, momentum, params.stop_at_err, ridge.array().mean());
 
-	vector<float> vpf(batch_size*n_threads);
+	vector<float> vpf(static_cast<size_t>(batch_size) * static_cast<size_t>(n_threads));
 	int niter = 0;
 	int go_on = 1;
 	vector<vector<int>> i_b(n_threads);

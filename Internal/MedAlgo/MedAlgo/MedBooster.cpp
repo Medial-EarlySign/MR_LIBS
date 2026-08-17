@@ -117,7 +117,7 @@ int MedBooster::learn_gradient_booster(MedMat<float> &x, MedMat<float> &y)
 			MLOG("MedBooster: gradient: round %d : x %d x %d : preds %d : alphas:", round, x.nrows, x.ncols, preds.size());
 			for (int i=0; i<alpha_dim; i++) MLOG(" %f", alpha(round, i));
 			double mse = 0;
-			for (int i=0; i<preds.size(); i++) mse += (residual(i, 0) - preds[i])*(residual(i, 0) - preds[i]);
+			for (int i=0; i<preds.size(); i++) mse += static_cast<double>(residual(i, 0) - preds[i]) * static_cast<double>(residual(i, 0) - preds[i]);
 			mse = mse/preds.size();
 			MLOG(" square_err %f", mse);
 			MLOG("\n");
