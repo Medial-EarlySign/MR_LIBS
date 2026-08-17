@@ -64,7 +64,7 @@ int MedXGB::Predict(float *x, float *&preds, int nsamples, int nftrs) const {
 	const float *out_preds;
 	XGBoosterPredict(my_learner, h_test, 0, 0, 0, &out_len, &out_preds);
 
-	int64_t len_res = nsamples * n_preds_per_sample();
+	int64_t len_res = static_cast<int64_t>(nsamples) * static_cast<int64_t>(n_preds_per_sample());
 	if (preds == NULL) preds = new float[len_res];
 	for (int i = 0; i < out_len; i++)
 		preds[i] = out_preds[i];

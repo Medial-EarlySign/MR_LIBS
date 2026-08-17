@@ -100,7 +100,7 @@ int MedSvm::Learn(float *x, float *y, const float *w, int nsamples, int nftrs) {
 			//if (x[i*nftrs + j] == MISSINg_Value)
 			//	continue;
 			node[j].index = (int)j;
-			node[j].value = x[i*nftrs + j];
+			node[j].value = x[static_cast<size_t>(i) * static_cast<size_t>(nftrs) + j];
 		}
 		node[nftrs].index = -1;
 
@@ -127,7 +127,7 @@ int MedSvm::Predict(float *x, float *&preds, int nsamples, int nftrs) const {
 		for (size_t j = 0; j < nftrs; ++j)
 		{
 			node[j].index = (int)j;
-			node[j].value = x[i*nftrs + j];
+			node[j].value = x[static_cast<size_t>(i) * static_cast<size_t>(nftrs) + j];
 		}
 		node[nftrs].index = -1;
 

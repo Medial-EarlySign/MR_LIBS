@@ -155,7 +155,7 @@ int MedSimpleEnsemble::predict_pre_combine(MedMat<float> &x, MedMat<float> &_pre
 	}
 
 	_preds.copy_header(x);
-	_preds.ncols = n_predictors * n_preds_per_sample;
+	_preds.ncols = static_cast<unsigned long long>(n_predictors) * static_cast<unsigned long long>(n_preds_per_sample);
 	_preds.resize(n_samples, n_predictors * n_preds_per_sample);
 
 	for (int j = 0; j < n_predictors; j++) {

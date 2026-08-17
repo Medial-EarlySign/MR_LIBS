@@ -224,7 +224,7 @@ template<typename T> void GibbsSampler<T>::learn_gibbs(const map<string, vector<
 				}
 
 				vector<int> clusters;
-				vector<float> train_vec(train_sz * pred_num_feats), label_vec(train_sz);
+				vector<float> train_vec(static_cast<size_t>(train_sz) * static_cast<size_t>(pred_num_feats)), label_vec(train_sz);
 				vector<bool> seen;
 				if (!params.select_with_repeats)
 					seen.resize(cohort_size);
@@ -254,10 +254,10 @@ template<typename T> void GibbsSampler<T>::learn_gibbs(const map<string, vector<
 				//vector<float> centers(k * pred_num_feats);
 #pragma omp critical 
 				{
-					feats_predictors[i].cluster_centers.resize(k * pred_num_feats);
+					feats_predictors[i].cluster_centers.resize(static_cast<size_t>(k) * static_cast<size_t>(pred_num_feats));
 					feats_predictors[i].clusters_y.resize(k);
 				}
-				vector<float> dists(k * train_sz);
+				vector<float> dists(static_cast<size_t>(k) * static_cast<size_t>(train_sz));
 				clusters.resize(train_sz);
 				//MLOG("Running kMeans for %s (%zu / %zu)\n", all_names[i].c_str(), i + 1, all_names.size());
 				KMeans(train_vec.data(), train_sz, pred_num_feats, k, params.max_iters,
@@ -303,7 +303,7 @@ template<typename T> void GibbsSampler<T>::learn_gibbs(const map<string, vector<
 				uniqu_value_bins[i].insert(uniqu_value_bins[i].end(), uniq_vals.begin(), uniq_vals.end());
 				sort(uniqu_value_bins[i].begin(), uniqu_value_bins[i].end());
 				vector<int> clusters;
-				vector<float> train_vec(train_sz * pred_num_feats), label_vec(train_sz);
+				vector<float> train_vec(static_cast<size_t>(train_sz) * static_cast<size_t>(pred_num_feats)), label_vec(train_sz);
 				vector<bool> seen;
 				if (!params.select_with_repeats)
 					seen.resize(cohort_size);
@@ -373,7 +373,7 @@ template<typename T> void GibbsSampler<T>::learn_gibbs(const map<string, vector<
 					int train_ratio = (int)label_vec.size() - calib_ratio;
 					uniform_int_distribution<> sel_rnd(0, (int)label_vec.size() - 1);
 					vector<bool> seen_sel(label_vec.size());
-					vector<float> pred_train_vec(train_ratio * pred_num_feats), pred_label_vec(train_ratio);
+					vector<float> pred_train_vec(static_cast<size_t>(train_ratio) * static_cast<size_t>(pred_num_feats)), pred_label_vec(train_ratio);
 					vector<vector<MedSample>> pred_calib_train(seen_val.size());
 					MedFeatures pred_calib_mat;
 					for (const string &name_feat : all_names)
@@ -410,7 +410,7 @@ template<typename T> void GibbsSampler<T>::learn_gibbs(const map<string, vector<
 						if (seen_sel[j])
 							continue;
 						for (size_t k = 0; k < pred_num_feats; ++k)
-							pred_train_vec[idx_train * pred_num_feats + k] = train_vec[j * pred_num_feats + k];
+							pred_train_vec[static_cast<size_t>(idx_train) * pred_num_feats + k] = train_vec[j * pred_num_feats + k];
 						pred_label_vec[idx_train] = label_vec[j];
 						++idx_train;
 					}

@@ -173,7 +173,7 @@ subGradientFunction  MedLinearModel::getSubGradients() {
 				float x_val = 1;
 				if (ind > 0)
 					x_val = x[ind - 1][i];
-				res += 2 * (params[ind] * x_val * x_val + (productRes - params[ind] * x_val)*x_val - y[i] * x_val);
+				res += 2 * (params[ind] * static_cast<double>(x_val) * static_cast<double>(x_val) + (productRes - params[ind] * static_cast<double>(x_val)) * static_cast<double>(x_val) - static_cast<double>(y[i]) * static_cast<double>(x_val));
 			}
 			//res /= y.size(); - constant, not needed
 
@@ -188,7 +188,7 @@ subGradientFunction  MedLinearModel::getSubGradients() {
 				float x_val = 1;
 				if (ind > 0)
 					x_val = x[ind - 1][i];
-				res += 2 * (params[ind] * x_val * x_val + (productRes - params[ind] * x_val)*x_val - y[i] * x_val) * weights->at(i);
+				res += 2 * (params[ind] * static_cast<double>(x_val) * static_cast<double>(x_val) + (productRes - params[ind] * static_cast<double>(x_val)) * static_cast<double>(x_val) - static_cast<double>(y[i]) * static_cast<double>(x_val)) * static_cast<double>(weights->at(i));
 			}
 			return res;
 		}
@@ -627,7 +627,7 @@ int MedLinearModel::Predict(float *x, float *&preds, int nsamples, int nftrs) co
 		{
 			double p = model_params[0];
 			for (size_t k = 0; k < nftrs; ++k) {
-				float val = x[i*nftrs + k];
+				float val = x[static_cast<size_t>(i)*static_cast<size_t>(nftrs) + k];
 				// has normalization in MedMat - but want to use same from train. when calling this function, it's always need normalizations
 				if (normalize) {
 					if (val == MED_MAT_MISSING_VALUE)

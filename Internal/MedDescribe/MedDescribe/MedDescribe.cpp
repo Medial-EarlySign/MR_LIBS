@@ -249,7 +249,7 @@ int VecMoments::get_for_vec(vector<float> &v)
 			N_out_of_range++;
 		else {
 			sum += val;
-			sum_sq += val*val;
+			sum_sq += static_cast<double>(val) * static_cast<double>(val);
 			n++;
 		}
 	}
