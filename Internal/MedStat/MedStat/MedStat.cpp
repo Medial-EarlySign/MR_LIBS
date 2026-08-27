@@ -196,7 +196,7 @@ template <typename T> float medial::performance::rmse_without_cleaning(const vec
 	double res = 0;
 	if (weights == NULL) {
 		for (size_t i = 0; i < y.size(); ++i)
-			res += (y[i] - preds[i]) * (y[i] - preds[i]);
+			res += static_cast<double>((y[i] - preds[i])) * static_cast<double>((y[i] - preds[i]));
 		res /= y.size();
 		res = sqrt(res);
 		return (float)res;
@@ -204,7 +204,7 @@ template <typename T> float medial::performance::rmse_without_cleaning(const vec
 	else {
 		double cnt = 0;
 		for (size_t i = 0; i < y.size(); ++i) {
-			res += (*weights)[i] * (y[i] - preds[i]) * (y[i] - preds[i]);
+			res += static_cast<double>((*weights)[i]) * static_cast<double>((y[i] - preds[i])) * static_cast<double>((y[i] - preds[i]));
 			cnt += (*weights)[i];
 		}
 		res /= cnt;
@@ -252,7 +252,7 @@ template <typename T> float medial::performance::L1_dist_without_cleaning(const 
 	else {
 		double cnt = 0;
 		for (size_t i = 0; i < y.size(); ++i) {
-			res += (*weights)[i] * abs(y[i] - preds[i]);
+			res += static_cast<double>((*weights)[i]) * static_cast<double>(abs(y[i] - preds[i]));
 			cnt += (*weights)[i];
 		}
 		return (float)(res / cnt);
@@ -305,7 +305,7 @@ template <typename T> float medial::performance::relative_L1_dist_without_cleani
 	else {
 		for (size_t i = 0; i < y.size(); ++i) {
 			if (preds[i] != 0) {
-				res += (*weights)[i] * abs(y[i] - preds[i]);
+				res += static_cast<double>((*weights)[i]) * static_cast<double>(abs(y[i] - preds[i]));
 				cnt += (*weights)[i];
 			}
 		}
@@ -813,7 +813,7 @@ float medial::performance::mutual_information(vector<int>& x, vector<int>& y, in
 	}
 
 	// Collect
-	vector<int> xCounts(nXbins, 0), yCounts(nYbins, 0), coCounts(nXbins*nYbins, 0);
+	vector<int> xCounts(nXbins, 0), yCounts(nYbins, 0), coCounts(static_cast<size_t>(nXbins) * static_cast<size_t>(nYbins), 0);
 	n = 0;
 	for (unsigned int i = 0; i < x.size(); i++) {
 		if (x[i] >= 0 && y[i] >= 0) {
@@ -1078,7 +1078,7 @@ template <typename T> float medial::performance::get_dVar(MedMat<T>& dMatrix) {
 	for (int i = 1; i < n; i++) {
 		for (int j = 0; j < i; j++) {
 			if (dMatrix(i, j) != -1) {
-				sum += 2 * dMatrix(i, j)*dMatrix(i, j);
+				sum += 2 * static_cast<double>(dMatrix(i, j)) * static_cast<double>(dMatrix(i, j));
 				num += 2;
 			}
 		}
@@ -1102,7 +1102,7 @@ template <typename T> float medial::performance::get_dCov(MedMat<T>& xDistMat, M
 	for (int i = 1; i < n; i++) {
 		for (int j = 0; j < i; j++) {
 			if (xDistMat(i, j) != -1 && yDistMat(i, j) != -1) {
-				sum += 2 * xDistMat(i, j)*yDistMat(i, j);
+				sum += 2 * static_cast<double>(xDistMat(i, j)) * static_cast<double>(yDistMat(i, j));
 				num += 2;
 			}
 		}
@@ -1125,7 +1125,7 @@ template <typename T> void medial::performance::multicateg_get_max_pred(vector<T
 
 	max_pred.resize(nsamples);
 	for (i = 0; i < nsamples; i++) {
-		float max = probs[i*ncateg];
+		float max = probs[static_cast<size_t>(i) * static_cast<size_t>(ncateg)];
 		int max_j = 0;
 		for (j = 1; j < ncateg; j++) {
 			if (probs[i*ncateg + j] > max) {
@@ -1305,7 +1305,7 @@ template <typename T> double medial::stats::mean_without_cleaning(const vector<T
 	double s = 0, c = 0;
 	if (has_weights)
 		for (size_t i = 0; i < v.size(); ++i) {
-			s += v[i] * (*weights)[i];
+			s += static_cast<double>(v[i]) * static_cast<double>((*weights)[i]);
 			c += (*weights)[i];
 		}
 	else {
@@ -1357,13 +1357,13 @@ template <typename T> double medial::stats::std_without_cleaning(const vector<T>
 	double s = 0, c = 0;
 	if (has_weights)
 		for (size_t i = 0; i < v.size(); ++i) {
-			s += (*weights)[i] * (v[i] - mean) * (v[i] - mean);
+			s += static_cast<double>((*weights)[i]) * (v[i] - mean) * (v[i] - mean);
 			c += (*weights)[i];
 		}
 	else {
 		c = (double)v.size();
 		for (size_t i = 0; i < v.size(); ++i)
-			s += (v[i] - mean) * (v[i] - mean);
+			s += static_cast<double>(v[i] - mean) * static_cast<double>(v[i] - mean);
 	}
 
 	if (c == 0)
@@ -1416,7 +1416,7 @@ void medial::stats::get_mean_and_std(float *values, const float* wgts, int size,
 	for (int i = 0; i < size; i++) {
 		if (!do_missing || values[i] != missing_value) {
 			c += wgts[i];
-			s += wgts[i] * values[i];
+			s += static_cast<double>(wgts[i]) * static_cast<double>(values[i]);
 			n++;
 		}
 	}
@@ -1431,7 +1431,7 @@ void medial::stats::get_mean_and_std(float *values, const float* wgts, int size,
 	s = 0.0;
 	for (int i = 0; i < size; i++) {
 		if (!do_missing || values[i] != missing_value)
-			s += wgts[i] * (values[i] - mean)*(values[i] - mean);
+			s += static_cast<double>(wgts[i]) * static_cast<double>((values[i] - mean)) * static_cast<double>((values[i] - mean));
 	}
 
 	if (n > 1)
@@ -1655,7 +1655,7 @@ T medial::stats::get_quantile(vector<T> vals, vector<float> w, float q)
 	float sumW = 0;
 	for (auto&& ww : w)sumW += ww;
 
-	double wq = sumW * q;
+	double wq = static_cast<double>(sumW) * static_cast<double>(q);
 	return T(inPlaceQuantile(vals.data(), w.data(), wq, (int)vals.size()));
 }
 template void medial::stats::get_percentiles<float>(vector<float> &vals, vector<float> &p, vector<float> &out_pvals, int only_positive_flag);
@@ -1670,7 +1670,7 @@ double medial::stats::chi2_n_x_m(vector<int> &cnts, int n, int m, vector<double>
 {
 	int i, j;
 
-	if (cnts.size() != n * m)
+	if (cnts.size() != static_cast<size_t>(n) * static_cast<size_t>(m))
 		return -1;
 
 	vector<double> s_n(n, 0);
@@ -1687,7 +1687,7 @@ double medial::stats::chi2_n_x_m(vector<int> &cnts, int n, int m, vector<double>
 
 	if (sum <= 0) return -1;
 
-	exp.resize(n*m);
+	exp.resize(static_cast<size_t>(n) * static_cast<size_t>(m));
 	double score = 0;
 	double epsilon = 1e-5;
 	for (i = 0; i < n; i++)
@@ -1844,8 +1844,8 @@ template<typename T> void medial::stats::welch_t_test(const vector<T> &grp1, con
 	T mean1, std1, mean2, std2;
 	get_mean_and_std_without_cleaning(grp1, mean1, std1);
 	get_mean_and_std_without_cleaning(grp2, mean2, std2);
-	double var1 = std1 * std1;
-	double var2 = std2 * std2;
+	double var1 = static_cast<double>(std1) * static_cast<double>(std1);
+	double var2 = static_cast<double>(std2) * static_cast<double>(std2);
 	double sz1 = (double)grp1.size();
 	double sz2 = (double)grp2.size();
 
@@ -1885,7 +1885,7 @@ template<typename T> double medial::stats::KL_divergence(const vector<T> &p, con
 	double kl = 0;
 	for (size_t i = 0; i < _p.size(); i++) {
 		if (_p[i] > 0)
-			kl += _p[i] * log(_p[i] / _q[i]);
+			kl += static_cast<double>(_p[i]) * log(static_cast<double>(_p[i]) / static_cast<double>(_q[i]));
 	}
 
 	return kl;
