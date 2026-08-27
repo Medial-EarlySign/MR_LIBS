@@ -381,8 +381,8 @@ void get_ROC_working_points(const vector<float> &preds, const vector<float> &y, 
 			if (!weights.empty())
 				weight = weights[i];
 			pred_indexes[preds[i]].push_back((int)i);
-			tot_true_labels += y[i] * weight;
-			tot_false_labels += weight * (!censor_removed ? (1 - y[i]) : int(y[i] <= 0));
+			tot_true_labels += static_cast<double>(y[i]) * static_cast<double>(weight);
+			tot_false_labels += static_cast<double>(weight) * static_cast<double>((!censor_removed ? (1 - y[i]) : int(y[i] <= 0)));
 			++tot_obj;
 		}
 	//tot_false_labels = tot_obj - tot_true_labels;
@@ -416,9 +416,9 @@ void get_ROC_working_points(const vector<float> &preds, const vector<float> &y, 
 			if (!weights.empty())
 				weight = weights[ind];
 			float true_label = y[ind];
-			t_sum += true_label * weight;
+			t_sum += static_cast<double>(true_label) * static_cast<double>(weight);
 			if (!censor_removed)
-				f_sum += (1 - true_label) * weight;
+				f_sum += static_cast<double>(1 - true_label) * static_cast<double>(weight);
 			else
 				f_sum += int(true_label <= 0) * weight;
 		}

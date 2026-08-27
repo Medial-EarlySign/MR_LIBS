@@ -689,7 +689,7 @@ int QuantizedRF::find_best_categories_chi2_split(QRF_Tree &tree, int node, int n
 
 	uniform_int_distribution<> dist(0, NFeat - 1);
 
-	tree.histr_num.resize(n_categ*MaxQ);
+	tree.histr_num.resize(static_cast<size_t>(n_categ) * static_cast<size_t>(MaxQ));
 	tree.histr_sum.resize(MaxQ);
 
 	vector<int> histL(n_categ);
@@ -819,7 +819,7 @@ int QuantizedRF::find_best_categories_entropy_split(QRF_Tree &tree, int node, in
 
 	uniform_int_distribution<> dist(0, NFeat - 1);
 
-	tree.histr_num.resize(n_categ*MaxQ);
+	tree.histr_num.resize(static_cast<size_t>(n_categ) * static_cast<size_t>(MaxQ));
 	tree.histr_sum.resize(MaxQ);
 
 	vector<int> histL(n_categ);
@@ -848,7 +848,7 @@ int QuantizedRF::find_best_categories_entropy_split(QRF_Tree &tree, int node, in
 				double max_start = (double)node_size;
 				if (!w.empty()) {
 					max_start = 0;
-					histr_num_w.resize(n_categ * max_q[ifeat]);
+					histr_num_w.resize(static_cast<size_t>(n_categ) * static_cast<size_t>(max_q[ifeat]));
 					fill(tree.histr_sum.begin(), tree.histr_sum.begin() + max_q[ifeat], (float)0);
 					fill(tree.histr_num.begin(), tree.histr_num.begin() + (n_categ*max_q[ifeat]), 0);
 					for (i = nd->from_sample; i <= nd->to_sample; i++) {
@@ -1017,7 +1017,7 @@ int QuantizedRF::find_best_categories_entropy_split_multilabel(QRF_Tree &tree, i
 
 	uniform_int_distribution<> dist(0, NFeat - 1);
 	
-	tree.histr_num.resize(log_n_categ*MaxQ);
+	tree.histr_num.resize(static_cast<size_t>(log_n_categ) * static_cast<size_t>(MaxQ));
 	tree.histr_sum.resize(MaxQ);
 
 	vector<int> histL(log_n_categ);
@@ -1046,7 +1046,7 @@ int QuantizedRF::find_best_categories_entropy_split_multilabel(QRF_Tree &tree, i
 				double max_start = (double)node_size;
 				if (!w.empty()) {
 					max_start = 0;
-					histr_num_w.resize(n_categ * max_q[ifeat]);
+					histr_num_w.resize(static_cast<size_t>(n_categ) * static_cast<size_t>(max_q[ifeat]));
 					fill(tree.histr_sum.begin(), tree.histr_sum.begin() + max_q[ifeat], (float)0);
 					fill(tree.histr_num.begin(), tree.histr_num.begin() + (n_categ*max_q[ifeat]), 0);
 					for (i = nd->from_sample; i <= nd->to_sample; i++) {
@@ -1253,7 +1253,7 @@ int QuantizedRF::find_best_regression_split(QRF_Tree &tree, int node, int ntry)
 				left_num = 0.0;
 				left_w = 0.0;
 				right_w = 0.0;
-				right_sum = (float)node_size*(nd->pred);
+				right_sum = static_cast<double>(node_size) * static_cast<double>(nd->pred);
 				right_num = (float)node_size;
 
 				max_i = -1;
@@ -1319,7 +1319,7 @@ int QuantizedRF::find_best_regression_split(QRF_Tree &tree, int node, int ntry)
 				left_sum = 0.0;
 				left_num = 0.0;
 
-				right_sum = (float)node_size*(nd->pred);
+				right_sum = static_cast<double>(node_size) * static_cast<double>(nd->pred);
 				right_num = (float)node_size;
 				max_i = -1;
 
@@ -2423,12 +2423,12 @@ void QRF_Forest::score_with_threads(float *x, int nfeat, int nsamples, float *re
 	// Reorderd quantiles to original orderd.diff 
 	if (get_counts_flag == PREDS_REGRESSION_WEIGHTED_QUANTILE) {
 		int nquantiles = (int)quantiles.size();
-		vector<float> tempRes(nsamples*nquantiles);
+		vector<float> tempRes(static_cast<size_t>(nsamples) * static_cast<size_t>(nquantiles));
 		for (int i = 0; i < nsamples; i++) {
 			for (int j = 0; j < nquantiles; j++)
 				tempRes[i*nquantiles + indexd_quantiles[j].second] = res[i*nquantiles + j];
 		}
-		memcpy(res, &(tempRes[0]), nquantiles*nsamples * sizeof(float));
+		memcpy(res, &(tempRes[0]), static_cast<size_t>(nquantiles) * static_cast<size_t>(nsamples) * sizeof(float));
 	}
 
 }
@@ -2469,7 +2469,7 @@ int QRF_Forest::score_samples(float *x_in, int nfeat, int nsamples, float *&res,
 	if (mode == QRF_REGRESSION_TREE || get_only_this_categ < 0)
 		score_with_threads(x_in, nfeat, nsamples, res);
 	else {
-		vector<float> resall(nsamples*n_categ);
+		vector<float> resall(static_cast<size_t>(nsamples) * static_cast<size_t>(n_categ));
 		score_with_threads(x_in, nfeat, nsamples, &resall[0]);
 		if (get_only_this_categ < n_categ)
 			for (int i = 0; i < nsamples; i++)

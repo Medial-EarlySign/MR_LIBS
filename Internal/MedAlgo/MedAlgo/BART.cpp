@@ -231,9 +231,9 @@ void bart_tree::next_gen_tree(const vector<float> &x, const vector<float> &y) {
 		for (size_t i = 0; i < nftrs; ++i) {
 			unordered_set<float> uniq_vals;
 			for (int k = 0; k < y.size(); ++k)
-				if (uniq_vals.find(x[k*nftrs + i]) == uniq_vals.end()) {
-					feature_to_sorted_vals[i].push_back(x[k*nftrs + i]);
-					uniq_vals.insert(x[k*nftrs + i]);
+				if (uniq_vals.find(x[static_cast<size_t>(k)*static_cast<size_t>(nftrs) + i]) == uniq_vals.end()) {
+					feature_to_sorted_vals[i].push_back(x[static_cast<size_t>(k)*static_cast<size_t>(nftrs) + i]);
+					uniq_vals.insert(x[static_cast<size_t>(k)*static_cast<size_t>(nftrs) + i]);
 				}
 		}
 		for (size_t i = 0; i < nftrs; ++i)
@@ -958,7 +958,7 @@ void BART::init_hyper_parameters(const vector<float> &residuals) {
 	if (tree_params.data_prior_type == regression_mean_shift) {
 		double mean_y = 0;
 		for (size_t i = 0; i < residuals.size(); ++i) {
-			sample_var_y += residuals[i] * residuals[i];
+			sample_var_y += static_cast<double>(residuals[i]) * static_cast<double>(residuals[i]);
 			mean_y += residuals[i];
 		}
 		mean_y /= nSamples;
@@ -1044,9 +1044,9 @@ void BART::learn(const vector<float> &x, const vector<float> &y) {
 	for (size_t i = 0; i < nftrs; ++i) {
 		unordered_set<float> uniq_vals;
 		for (int k = 0; k < y.size(); ++k)
-			if (uniq_vals.find(x[k*nftrs + i]) == uniq_vals.end()) {
-				feature_to_sorted_vals[i].push_back(x[k*nftrs + i]);
-				uniq_vals.insert(x[k*nftrs + i]);
+			if (uniq_vals.find(x[static_cast<size_t>(k)*static_cast<size_t>(nftrs) + i]) == uniq_vals.end()) {
+				feature_to_sorted_vals[i].push_back(x[static_cast<size_t>(k)*static_cast<size_t>(nftrs) + i]);
+				uniq_vals.insert(x[static_cast<size_t>(k)*static_cast<size_t>(nftrs) + i]);
 			}
 	}
 	for (size_t i = 0; i < nftrs; ++i)
@@ -1179,7 +1179,7 @@ void BART::learn(const vector<float> &x, const vector<float> &y) {
 }
 
 void BART::predict(const vector<float> &x, int nSamples, vector<float> &scores) const {
-	if (nftrs * nSamples != x.size())
+	if (static_cast<size_t>(nftrs) * static_cast<size_t>(nSamples) != x.size())
 		throw invalid_argument("x vector is in wrong size."
 			" should be nsamples observation X number_of_features\n");
 	scores.resize(nSamples);

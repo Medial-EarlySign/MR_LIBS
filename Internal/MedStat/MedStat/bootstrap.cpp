@@ -50,7 +50,7 @@ float stdArr(const vector<float> &arr, float meanVal) {
 	int cnt = 0;
 	for (size_t i = 0; i < arr.size(); ++i)
 		if (arr[i] != MED_MAT_MISSING_VALUE) {
-			res += (arr[i] - meanVal) * (arr[i] - meanVal);
+			res += static_cast<double>(arr[i] - meanVal) * static_cast<double>(arr[i] - meanVal);
 			++cnt;
 		}
 	if (cnt > 0) {
@@ -442,7 +442,7 @@ Mem_Iterator::Mem_Iterator(const vector<int> &pids, const vector<int> &cohort_in
 void Mem_Iterator::fetch_selection(mt19937 &rd_gen, vector<int> &indexes) const {
 	indexes.clear();
 	if (sample_per_pid > 0)
-		indexes.reserve(cohort_size * sample_per_pid);
+		indexes.reserve(static_cast<size_t>(cohort_size) * static_cast<size_t>(sample_per_pid));
 	else
 		indexes.reserve(tot_rec_cnt);
 	uniform_int_distribution<> rand_pids(0, (int)ind_to_pid.size() - 1);
@@ -1342,10 +1342,10 @@ map<string, float> calc_roc_measures_with_inc(Lazy_Iterator *iterator, int threa
 			for (int y_i = 0; y_i < labels->size(); ++y_i)
 			{
 				float true_label = params->fix_label_to_binary ? (*labels)[y_i] > 0 : (*labels)[y_i];
-				t_sum += true_label * (*weights)[y_i];
-				tt_cnt += (true_label > 0 ? true_label : 0) * (*weights)[y_i];
+				t_sum += static_cast<double>(true_label) * static_cast<double>((*weights)[y_i]);
+				tt_cnt += static_cast<double>((true_label > 0 ? true_label : 0)) * static_cast<double>((*weights)[y_i]);
 				if (!censor_removed)
-					f_sum += (1 - true_label) * (*weights)[y_i];
+					f_sum += static_cast<double>(1 - true_label) * static_cast<double>((*weights)[y_i]);
 				else
 					f_sum += int(true_label <= 0) * (*weights)[y_i];
 				f_cnt += int(true_label <= 0) * (*weights)[y_i];
@@ -2512,9 +2512,9 @@ map<string, float> calc_regression(Lazy_Iterator *iterator, int thread_num, Meas
 		double diff = abs(pred - y);
 		if (has_weights) {
 			tot_loss += diff * diff * w;
-			sum_outcome += y * w;
+			sum_outcome += static_cast<double>(y) * static_cast<double>(w);
 			tot_count += w;
-			second_moment += y * y * w;
+			second_moment += static_cast<double>(y) * static_cast<double>(y) * static_cast<double>(w);
 
 			per_score[pred] += y * w;
 			per_score_sec[pred] += y * y * w;
@@ -2532,7 +2532,7 @@ map<string, float> calc_regression(Lazy_Iterator *iterator, int thread_num, Meas
 			tot_loss += diff * diff;
 			sum_outcome += y;
 			++tot_count;
-			second_moment += y * y;
+			second_moment += static_cast<double>(y) * static_cast<double>(y);
 
 			per_score[pred] += y;
 			per_score_sec[pred] += y * y;
@@ -3125,7 +3125,7 @@ void preprocess_bin_scores(vector<float> &preds, Measurement_Params *function_pa
 				double mean_score = 0, tot_cnt = 0;
 				vector<int> merged_inds;
 				for (int ii = merge->first; ii <= merge->second; ++ii) {
-					mean_score += unique_scores[ii] * thresholds_indexes[unique_scores[ii]].size();
+					mean_score += static_cast<double>(unique_scores[ii]) * static_cast<double>(thresholds_indexes[unique_scores[ii]].size());
 					tot_cnt += thresholds_indexes[unique_scores[ii]].size();
 					merged_inds.insert(merged_inds.end(),
 						thresholds_indexes[unique_scores[ii]].begin(), thresholds_indexes[unique_scores[ii]].end());

@@ -169,7 +169,7 @@ int ResampleMissingProcessor::Learn(MedFeatures& features, unordered_set<int>& i
 
 	if (add_new_data > 0) {
 		original_samples_id.reserve(original_samples_id.size() + add_new_data);
-		vector<float> rows_m(add_new_data * nftrs);
+		vector<float> rows_m(static_cast<size_t>(add_new_data) * static_cast<size_t>(nftrs));
 		unordered_set<vector<bool>> seen_mask;
 		
 		double log_max_opts = log(add_new_data) / log(2.0);
