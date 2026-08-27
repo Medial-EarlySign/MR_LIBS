@@ -5,6 +5,10 @@
 ![GitHub contributors](https://img.shields.io/github/contributors-anon/Medial-EarlySign/medpython)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/Medial-EarlySign/medpython)
 
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/medpython/badges/version.svg)](https://anaconda.org/conda-forge/medpython)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/medpython/badges/platforms.svg)](https://anaconda.org/conda-forge/medpython)
+![Conda Downloads](https://img.shields.io/conda/d/conda-forge/medpython)
+
 
 ## Overview of Medial Infrastructure
 Medial EarlySign provides an infrastructure to convert **Electronic Medical Records (EMR)** - a complex, semi-structured time-series dataset into **machine-learning-ready** data and reproducible model pipelines. The library is optimized for sparse time-series EMR data and is designed for low memory usage and fast processing at scale.
